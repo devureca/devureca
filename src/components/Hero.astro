@@ -1,0 +1,139 @@
+---
+import Maze from "./Maze.astro";
+---
+
+<section id="hero">
+    <div class="col hero-inner">
+        <Maze />
+
+        <p class="hero-intro">
+            Hola, soy <strong>Tu Nombre</strong> — un
+            <span class="hero-role-tag">Diseñador &amp; Desarrollador</span>
+            con background fullstack y pasión por construir interfaces que funcionan
+            de verdad.
+        </p>
+
+        <div class="hero-bio-box">
+            Combino <strong>diseño de producto con ingeniería</strong> — ayudando
+            a equipos y fundadores a ir <strong
+                >de la idea al producto real</strong
+            > con interfaces listas para producción en web, mobile y desktop.
+        </div>
+
+        <div class="hero-links">
+            <a href="#proyectos" class="link-primary">Ver proyectos</a>
+            <a href="#contacto" class="link-secondary">Hablemos</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    #hero {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: var(--bg);
+        padding: 140px 0 80px;
+    }
+
+    .hero-inner {
+        will-change: transform, opacity;
+        transform-origin: top center;
+    }
+
+    .hero-intro {
+        font-size: clamp(17px, 2.4vw, 22px);
+        line-height: 1.6;
+        color: var(--text);
+        margin-bottom: 28px;
+        font-weight: 400;
+    }
+
+    .hero-intro strong {
+        color: #fff;
+    }
+
+    .hero-role-tag {
+        display: inline;
+        background: var(--accent);
+        color: var(--bg);
+        padding: 1px 6px;
+        font-weight: 500;
+        transition: background 0.8s ease;
+    }
+
+    .hero-bio-box {
+        border: 1px dashed #333;
+        padding: 24px 28px;
+        font-size: clamp(13px, 1.6vw, 15px);
+        line-height: 1.75;
+        color: var(--text-dim);
+        margin-bottom: 40px;
+    }
+
+    .hero-bio-box strong {
+        color: var(--text);
+        font-weight: 500;
+    }
+
+    .hero-links {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .link-primary {
+        font-size: 12px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--bg);
+        background: var(--text);
+        text-decoration: none;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: opacity 0.2s;
+    }
+
+    .link-primary:hover {
+        opacity: 0.8;
+    }
+
+    .link-secondary {
+        font-size: 12px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 2px;
+        transition:
+            color 0.2s,
+            border-color 0.2s;
+    }
+
+    .link-secondary:hover {
+        color: var(--text);
+        border-color: var(--text-dim);
+    }
+</style>
+
+<script>
+    const heroInner = document.querySelector(".hero-inner") as HTMLElement;
+    const hero = document.getElementById("hero") as HTMLElement;
+
+    function updateHeroScale() {
+        const scrollTop = window.scrollY;
+        const heroH = hero.offsetHeight;
+        const progress = Math.min(scrollTop / heroH, 1);
+
+        const scale = 1 - progress * 0.12;
+        const opacity = 1 - progress * 0.6;
+        const translateY = -(progress * 24);
+
+        heroInner.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+        heroInner.style.opacity = String(opacity);
+    }
+
+    window.addEventListener("scroll", updateHeroScale);
+</script>

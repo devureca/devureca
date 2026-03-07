@@ -1,0 +1,73 @@
+---
+
+---
+
+<nav id="nav">
+    <div class="col">
+        <a href="/" class="nav-logo">devureca</a>
+        <a href="#contacto" class="nav-cta">Hablemos</a>
+    </div>
+</nav>
+
+<style>
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 20px 0;
+        transition:
+            border-color 0.3s,
+            background 0.3s;
+        border-bottom: 1px solid transparent;
+    }
+
+    nav.scrolled {
+        background: rgba(9, 9, 9, 0.95);
+        backdrop-filter: blur(12px);
+        border-color: var(--border);
+    }
+
+    .col {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .nav-logo {
+        font-family: "DM Mono", monospace;
+        font-size: 15px;
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+    }
+
+    .nav-cta {
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--bg);
+        background: var(--accent);
+        text-decoration: none;
+        padding: 8px 16px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        transition:
+            opacity 0.2s,
+            background 0.8s ease;
+    }
+
+    .nav-cta:hover {
+        opacity: 0.85;
+    }
+</style>
+
+<script>
+    const nav = document.getElementById("nav");
+
+    window.addEventListener("scroll", () => {
+        nav?.classList.toggle("scrolled", window.scrollY > 40);
+    });
+</script>

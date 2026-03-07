@@ -1,9 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
 ---
 
 <Layout>
-	<main>
-		<p style="color:white">Hola mundo</p>
-	</main>
+	<Nav />
+	<Hero />
+	<div
+		style="position:relative; z-index:2; background:var(--bg); height:200vh; padding:80px 0;"
+	>
+		<div class="col" style="color:var(--text-dim); font-size:13px;">
+			Aquí van las secciones...
+		</div>
+	</div>
 </Layout>
