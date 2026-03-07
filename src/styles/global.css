@@ -1,1 +1,51 @@
 @import "tailwindcss";
+
+:root {
+    --bg: #090909;
+    --bg-2: #111111;
+    --text: #e2e2e2;
+    --text-muted: #666;
+    --text-dim: #999;
+    --accent: #c8ff00;
+    --border: #1e1e1e;
+    --col-width: 660px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+.col {
+    max-width: var(--col-width);
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Color themes por sección */
+body.theme-2 {
+    --accent: #00e5ff;
+}
+
+body.theme-3 {
+    --accent: #bf94ff;
+}
+
+body.theme-4 {
+    --accent: #ff8c42;
+}
