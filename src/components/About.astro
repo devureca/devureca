@@ -7,28 +7,45 @@
         <div class="section-label">Sobre mí</div>
 
         <p class="about-text reveal">
-            Combino <strong>diseño de producto con desarrollo fullstack</strong> —
-            lo que significa que puedo tomar una idea desde el wireframe hasta el
-            deploy sin perder calidad en ningún paso. No diseño cosas que no se pueden
-            construir.
+            Soy de <strong>Huancayo, Perú</strong> — una ciudad en los Andes a 3,200
+            metros sobre el nivel del mar. Trabajo de forma independiente desde ahí,
+            construyendo productos para el mundo desde el centro del mundo.
         </p>
 
         <p class="about-text reveal">
-            Trabajo principalmente con <strong>React, TypeScript y Node</strong> en
-            el lado técnico, y con <strong>Figma</strong> para diseño. Me interesan
-            los productos para developers, herramientas de productividad y plataformas
-            con comunidad.
+            Fuera del código me encontrarás leyendo <strong>cómics</strong>,
+            coleccionando
+            <strong>videojuegos</strong> o escuchando <strong>metal</strong>.
+            Creo que las tres cosas me hacen mejor diseñador y desarrollador —
+            cada una a su manera me enseñó algo sobre composición, sistemas y
+            obsesión por el detalle.
         </p>
 
-        <div class="skills-grid reveal">
-            <div class="skill-item">React / Next.js</div>
-            <div class="skill-item">TypeScript</div>
-            <div class="skill-item">Figma / Diseño UI</div>
-            <div class="skill-item">Node.js / APIs</div>
-            <div class="skill-item">Astro</div>
-            <div class="skill-item">Tailwind CSS</div>
-            <div class="skill-item">PostgreSQL</div>
-            <div class="skill-item">UX Research</div>
+        <p class="about-text reveal">
+            Tengo un compromiso especial con el <strong
+                >código abierto y la comunidad</strong
+            >. He construido y seguiré construyendo herramientas gratuitas
+            porque creo que la tecnología debería estar al alcance de todos, no
+            solo de quienes pueden pagarla.
+        </p>
+
+        <div class="stack-grid reveal">
+            <div class="stack-item">
+                <span class="stack-label">Diseño</span>
+                <span class="stack-tools">Figma · Framer</span>
+            </div>
+            <div class="stack-item">
+                <span class="stack-label">Frontend</span>
+                <span class="stack-tools">React · Astro · TypeScript</span>
+            </div>
+            <div class="stack-item">
+                <span class="stack-label">Backend</span>
+                <span class="stack-tools">Node.js · PostgreSQL</span>
+            </div>
+            <div class="stack-item">
+                <span class="stack-label">Deploy</span>
+                <span class="stack-tools">Vercel · GitHub</span>
+            </div>
         </div>
     </div>
 </section>
@@ -71,31 +88,41 @@
         font-weight: 500;
     }
 
-    .skills-grid {
+    .stack-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 2px;
         margin-top: 40px;
     }
 
-    .skill-item {
+    .stack-item {
         background: var(--bg-2);
         border: 1px solid var(--border);
         padding: 16px 20px;
-        font-size: 12px;
-        letter-spacing: 0.06em;
-        color: var(--text-dim);
-        transition:
-            color 0.2s,
-            border-color 0.2s;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        transition: border-color 0.2s;
     }
 
-    .skill-item:hover {
-        color: var(--text);
+    .stack-item:hover {
         border-color: var(--text-muted);
     }
 
-    /* Reveal animation */
+    .stack-label {
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+        transition: color 0.8s ease;
+    }
+
+    .stack-tools {
+        font-size: 13px;
+        color: var(--text-dim);
+        letter-spacing: 0.04em;
+    }
+
     .reveal {
         opacity: 0;
         transform: translateY(20px);

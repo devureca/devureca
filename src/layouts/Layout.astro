@@ -1,34 +1,34 @@
 ---
+import "../styles/global.css";
+
 interface Props {
-  title?: string;
-  description?: string;
+    title?: string;
+    description?: string;
 }
 
 const {
-  title = 'Tu Nombre — Diseñador & Desarrollador',
-  description = 'Portfolio de diseño y desarrollo fullstack',
+    title = "Gianfranco Ureta — Diseñador & Desarrollador",
+    description = "Portfolio de diseño y desarrollo fullstack",
 } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <title>{title}</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <title>{title}</title>
 
-    <!-- Fuente -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Estilos globales -->
-    <link rel="stylesheet" href="/src/styles/global.css" />
-  </head>
-  <body>
-    <slot />
-  </body>
+        <!-- Fuente -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <slot />
+    </body>
 </html>
