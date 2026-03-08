@@ -1,0 +1,40 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer>
+    <div class="col">
+        <span class="footer-copy">© {year} Gianfranco | devureca</span>
+        <div class="footer-dot"></div>
+    </div>
+</footer>
+
+<style>
+    footer {
+        position: relative;
+        z-index: 2;
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        padding: 28px 0;
+    }
+
+    .col {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .footer-copy {
+        font-size: 11px;
+        color: var(--text-muted);
+        letter-spacing: 0.06em;
+    }
+
+    .footer-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--accent);
+        border-radius: 50%;
+        transition: background 0.8s ease;
+    }
+</style>
