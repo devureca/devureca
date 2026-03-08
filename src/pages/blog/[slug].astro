@@ -1,0 +1,166 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+
+export async function getStaticPaths() {
+    const posts = await getCollection("blog");
+    return posts.map((post: CollectionEntry<"blog">) => ({
+        params: { slug: post.slug },
+        props: { post },
+    }));
+}
+
+const { post } = Astro.props as { post: CollectionEntry<"blog"> };
+const { Content } = await render(post);
+---
+
+<Layout title={`${post.data.title} — Gianfranco Ureta`}>
+    <Nav />
+
+    <main>
+        <div class="col">
+            <a href="/" class="back">← Volver</a>
+
+            <div class="post-header">
+                <span class="post-date">{post.data.date}</span>
+                <h1>{post.data.title}</h1>
+                {
+                    post.data.description && (
+                        <p class="post-desc">{post.data.description}</p>
+                    )
+                }
+            </div>
+
+            <div class="post-content">
+                <Content />
+            </div>
+        </div>
+    </main>
+
+    <Footer />
+</Layout>
+
+<style>
+    main {
+        position: relative;
+        z-index: 2;
+        background: var(--bg);
+        min-height: 100vh;
+        padding: 120px 0 80px;
+    }
+
+    .back {
+        display: inline-block;
+        font-size: 12px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-decoration: none;
+        margin-bottom: 48px;
+        transition: color 0.2s;
+    }
+
+    .back:hover {
+        color: var(--text);
+    }
+
+    .post-header {
+        margin-bottom: 48px;
+        padding-bottom: 48px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .post-date {
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        display: block;
+        margin-bottom: 16px;
+    }
+
+    h1 {
+        font-size: clamp(24px, 4vw, 40px);
+        font-weight: 400;
+        letter-spacing: -0.01em;
+        line-height: 1.25;
+        color: var(--text);
+        margin-bottom: 16px;
+    }
+
+    .post-desc {
+        font-size: 15px;
+        color: var(--text-dim);
+        line-height: 1.8;
+    }
+
+    /* Estilos para el contenido Markdown */
+    .post-content {
+        font-size: 15px;
+        color: var(--text-dim);
+        line-height: 1.9;
+        max-width: 600px;
+    }
+
+    .post-content :global(h2) {
+        font-size: 20px;
+        font-weight: 400;
+        color: var(--text);
+        margin: 40px 0 16px;
+        letter-spacing: -0.01em;
+    }
+
+    .post-content :global(h3) {
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--text);
+        margin: 32px 0 12px;
+    }
+
+    .post-content :global(p) {
+        margin-bottom: 20px;
+    }
+
+    .post-content :global(strong) {
+        color: var(--text);
+        font-weight: 500;
+    }
+
+    .post-content :global(a) {
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 1px solid var(--accent);
+        transition: opacity 0.2s;
+    }
+
+    .post-content :global(a:hover) {
+        opacity: 0.7;
+    }
+
+    .post-content :global(code) {
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        padding: 2px 6px;
+        font-size: 13px;
+    }
+
+    .post-content :global(pre) {
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        padding: 20px;
+        overflow-x: auto;
+        margin-bottom: 24px;
+    }
+
+    .post-content :global(ul),
+    .post-content :global(ol) {
+        padding-left: 20px;
+        margin-bottom: 20px;
+    }
+
+    .post-content :global(li) {
+        margin-bottom: 8px;
+    }
+</style>
