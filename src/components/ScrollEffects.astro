@@ -20,30 +20,12 @@
 <script>
     const progress = document.getElementById("progress")!;
 
-    const sections = [
-        { id: "hero", theme: "", accent: "#c8ff00" },
-        { id: "proyectos", theme: "theme-2", accent: "#00e5ff" },
-        { id: "blog", theme: "theme-3", accent: "#bf94ff" },
-        { id: "about", theme: "theme-3", accent: "#bf94ff" },
-        { id: "contacto", theme: "theme-4", accent: "#ff8c42" },
-    ];
-
     function updateScroll() {
-        // Progress bar
         const scrollTop = window.scrollY;
         const docHeight =
             document.documentElement.scrollHeight - window.innerHeight;
         progress.style.width = `${(scrollTop / docHeight) * 100}%`;
-
-        // Color theme por sección
-        const mid = scrollTop + window.innerHeight * 0.45;
-        let current = sections[0];
-        for (const s of sections) {
-            const el = document.getElementById(s.id);
-            if (el && el.offsetTop <= mid) current = s;
-        }
-        document.body.className = current.theme;
-        progress.style.background = current.accent;
+        progress.style.background = "#E95420";
     }
 
     window.addEventListener("scroll", updateScroll, { passive: true });

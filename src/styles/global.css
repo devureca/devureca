@@ -6,9 +6,19 @@
     --text: #e2e2e2;
     --text-muted: #666;
     --text-dim: #999;
-    --accent: #c8ff00;
+    --accent: #E95420;
     --border: #1e1e1e;
     --col-width: 660px;
+}
+
+body.light {
+    --bg: #f5f5f0;
+    --bg-2: #e8e8e3;
+    --text: #0a0a0a;
+    --text-muted: #555;
+    --text-dim: #444;
+    --border: #d0d0c8;
+    --accent: #E95420;
 }
 
 * {
@@ -19,6 +29,7 @@
 
 html {
     scroll-behavior: smooth;
+    background: #090909;
 }
 
 body {
@@ -48,4 +59,16 @@ body.theme-3 {
 
 body.theme-4 {
     --accent: #ff8c42;
+}
+
+body.light.theme-2 {
+    --accent: #0088aa;
+}
+
+body.light.theme-3 {
+    --accent: #7c3aed;
+}
+
+body.light.theme-4 {
+    --accent: #d4500a;
 }

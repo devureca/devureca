@@ -49,14 +49,14 @@
     }
 
     function generate() {
+        const isLight = document.body.classList.contains("light");
+        const bg = isLight ? "#f5f5f0" : "#111111";
+        const stroke = isLight ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.75)";
+
         ctx.clearRect(0, 0, SIZE, SIZE);
-
-        // Fondo
-        ctx.fillStyle = "#0d0d0d";
+        ctx.fillStyle = bg;
         ctx.fillRect(0, 0, SIZE, SIZE);
-
-        // Líneas diagonales
-        ctx.strokeStyle = "rgba(255,255,255,0.75)";
+        ctx.strokeStyle = stroke;
         ctx.lineWidth = 0.6;
         ctx.lineCap = "square";
 
@@ -78,5 +78,10 @@
         }, 150);
     });
 
-    generate();
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle?.addEventListener("click", () => {
+        setTimeout(generate, 50);
+    });
+
+    document.addEventListener("DOMContentLoaded", generate);
 </script>

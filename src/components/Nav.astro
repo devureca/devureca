@@ -5,7 +5,13 @@
 <nav id="nav">
     <div class="col">
         <a href="/" class="nav-logo">devureca</a>
-        <a href="#contacto" class="nav-cta">Hablemos</a>
+        <div class="nav-right">
+            <button id="themeToggle" aria-label="Toggle theme">
+                <span class="icon-dark">○</span>
+                <span class="icon-light">●</span>
+            </button>
+            <a href="#contacto" class="nav-cta">Hablemos</a>
+        </div>
     </div>
 </nav>
 
@@ -29,10 +35,20 @@
         border-color: var(--border);
     }
 
+    body.light nav.scrolled {
+        background: rgba(245, 245, 240, 0.95);
+    }
+
     .col {
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
     }
 
     .nav-logo {
@@ -42,6 +58,7 @@
         text-decoration: none;
         font-weight: 500;
         letter-spacing: 0.04em;
+        transition: color 0.3s;
     }
 
     .nav-cta {
@@ -62,12 +79,59 @@
     .nav-cta:hover {
         opacity: 0.85;
     }
+
+    #themeToggle {
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-size: 16px;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+            border-color 0.2s,
+            color 0.2s;
+        padding: 0;
+    }
+
+    #themeToggle:hover {
+        border-color: var(--text-muted);
+        color: var(--text);
+    }
+
+    .icon-light {
+        display: none;
+    }
+    .icon-dark {
+        display: block;
+    }
+
+    body.light .icon-light {
+        display: block;
+    }
+    body.light .icon-dark {
+        display: none;
+    }
 </style>
 
 <script>
-    const nav = document.getElementById("nav");
+    const nav = document.getElementById("nav")!;
+    const toggle = document.getElementById("themeToggle")!;
+
+    // Recuperar preferencia guardada
+    const saved = localStorage.getItem("theme");
+    if (saved === "light") document.body.classList.add("light");
+
+    toggle.addEventListener("click", () => {
+        document.body.classList.toggle("light");
+        const isLight = document.body.classList.contains("light");
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+    });
 
     window.addEventListener("scroll", () => {
-        nav?.classList.toggle("scrolled", window.scrollY > 40);
+        nav.classList.toggle("scrolled", window.scrollY > 40);
     });
 </script>
