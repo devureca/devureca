@@ -1,0 +1,127 @@
+---
+const posts = [
+    {
+        slug: "como-pienso-el-diseno",
+        title: "Cómo pienso el diseño antes de abrir Figma",
+        date: "Mar 2025",
+    },
+    {
+        slug: "lo-que-aprendi-construyendo-mi-primer-saas",
+        title: "Lo que aprendí construyendo mi primer SaaS",
+        date: "Ene 2025",
+    },
+    {
+        slug: "por-que-el-codigo-hace-mejor-al-disenador",
+        title: "Por qué el código hace mejor al diseñador",
+        date: "Nov 2024",
+    },
+    {
+        slug: "sistemas-de-diseno-que-no-se-abandonan",
+        title: "Sistemas de diseño que no se abandonan a los 3 meses",
+        date: "Sep 2024",
+    },
+];
+---
+
+<section id="blog">
+    <div class="col">
+        <div class="section-label">Escritura</div>
+
+        {
+            posts.map((post, i) => (
+                <a
+                    href={`/blog/${post.slug}`}
+                    class="blog-item"
+                    style={`transition-delay: ${i * 0.08}s`}
+                >
+                    <span class="blog-title">{post.title}</span>
+                    <span class="blog-date">{post.date}</span>
+                </a>
+            ))
+        }
+    </div>
+</section>
+
+<style>
+    #blog {
+        position: relative;
+        z-index: 2;
+        background: var(--bg);
+        padding: 80px 0;
+    }
+
+    .section-label {
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 48px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+    }
+
+    .blog-item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: baseline;
+        gap: 16px;
+        padding: 20px 0;
+        border-bottom: 1px solid var(--border);
+        text-decoration: none;
+        opacity: 0;
+        transform: translateY(16px);
+        transition:
+            opacity 0.5s ease,
+            transform 0.5s ease;
+    }
+
+    .blog-item:first-of-type {
+        border-top: 1px solid var(--border);
+    }
+
+    .blog-item.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .blog-title {
+        font-size: 17px;
+        color: var(--text);
+        transition: color 0.2s;
+        letter-spacing: 0.01em;
+    }
+
+    .blog-item:hover .blog-title {
+        color: var(--accent);
+    }
+
+    .blog-date {
+        font-size: 11px;
+        color: var(--text-muted);
+        white-space: nowrap;
+        letter-spacing: 0.08em;
+    }
+</style>
+
+<script>
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) entry.target.classList.add("visible");
+            });
+        },
+        { threshold: 0.12 },
+    );
+
+    document.querySelectorAll(".blog-item").forEach((el) => {
+        observer.observe(el);
+    });
+</script>

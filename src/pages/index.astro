@@ -3,17 +3,18 @@ import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Hero from "../components/Hero.astro";
 import Carousel from "../components/Carousel.astro";
+import About from "../components/About.astro";
+import Blog from "../components/Blog.astro";
+import Contact from "../components/Contact.astro";
+import ScrollEffects from "../components/ScrollEffects.astro";
 ---
 
 <Layout>
+	<ScrollEffects />
 	<Nav />
 	<Hero />
 	<Carousel />
-	<div
-		style="position:relative; z-index:2; background:var(--bg); height:200vh; padding:80px 0;"
-	>
-		<div class="col" style="color:var(--text-dim); font-size:13px;">
-			Aquí van las secciones...
-		</div>
-	</div>
+	<About />
+	<Blog />
+	<Contact />
 </Layout>

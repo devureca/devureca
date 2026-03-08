@@ -1,0 +1,127 @@
+---
+
+---
+
+<section id="about">
+    <div class="col">
+        <div class="section-label">Sobre mí</div>
+
+        <p class="about-text reveal">
+            Combino <strong>diseño de producto con desarrollo fullstack</strong> —
+            lo que significa que puedo tomar una idea desde el wireframe hasta el
+            deploy sin perder calidad en ningún paso. No diseño cosas que no se pueden
+            construir.
+        </p>
+
+        <p class="about-text reveal">
+            Trabajo principalmente con <strong>React, TypeScript y Node</strong> en
+            el lado técnico, y con <strong>Figma</strong> para diseño. Me interesan
+            los productos para developers, herramientas de productividad y plataformas
+            con comunidad.
+        </p>
+
+        <div class="skills-grid reveal">
+            <div class="skill-item">React / Next.js</div>
+            <div class="skill-item">TypeScript</div>
+            <div class="skill-item">Figma / Diseño UI</div>
+            <div class="skill-item">Node.js / APIs</div>
+            <div class="skill-item">Astro</div>
+            <div class="skill-item">Tailwind CSS</div>
+            <div class="skill-item">PostgreSQL</div>
+            <div class="skill-item">UX Research</div>
+        </div>
+    </div>
+</section>
+
+<style>
+    #about {
+        position: relative;
+        z-index: 2;
+        background: var(--bg);
+        padding: 80px 0;
+    }
+
+    .section-label {
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 48px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+    }
+
+    .about-text {
+        font-size: 15px;
+        color: var(--text-dim);
+        line-height: 1.9;
+        margin-bottom: 24px;
+    }
+
+    .about-text strong {
+        color: var(--text);
+        font-weight: 500;
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px;
+        margin-top: 40px;
+    }
+
+    .skill-item {
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        padding: 16px 20px;
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        color: var(--text-dim);
+        transition:
+            color 0.2s,
+            border-color 0.2s;
+    }
+
+    .skill-item:hover {
+        color: var(--text);
+        border-color: var(--text-muted);
+    }
+
+    /* Reveal animation */
+    .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+            opacity 0.7s ease,
+            transform 0.7s ease;
+    }
+
+    .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<script>
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) entry.target.classList.add("visible");
+            });
+        },
+        { threshold: 0.12 },
+    );
+
+    document.querySelectorAll("#about .reveal").forEach((el, i) => {
+        (el as HTMLElement).style.transitionDelay = `${i * 0.1}s`;
+        observer.observe(el);
+    });
+</script>
