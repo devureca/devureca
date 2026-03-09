@@ -303,109 +303,114 @@ const projects = [
 </style>
 
 <script>
-    const track = document.getElementById("carouselTrack")!;
-    const wrap = document.getElementById("carouselWrap")!;
-    const btnPrev = document.getElementById("btnPrev")!;
-    const btnNext = document.getElementById("btnNext")!;
-    const dotsContainer = document.getElementById("carouselDots")!;
-    const cards = track.querySelectorAll<HTMLElement>(".project-card");
+    document.addEventListener("astro:page-load", () => {
+        const track = document.getElementById("carouselTrack") as HTMLElement;
+        if (!track) return;
+        const wrap = document.getElementById("carouselWrap") as HTMLElement;
+        const btnPrev = document.getElementById("btnPrev") as HTMLElement;
+        const btnNext = document.getElementById("btnNext") as HTMLElement;
+        const dotsContainer = document.getElementById(
+            "carouselDots",
+        ) as HTMLElement;
+        const cards = track.querySelectorAll<HTMLElement>(".project-card");
 
-    let currentIndex = 0;
-    let offset = 0;
-    let dragDelta = 0;
+        let currentIndex = 0;
+        let offset = 0;
+        let dragDelta = 0;
 
-    // Dots
-    cards.forEach((_, i) => {
-        const dot = document.createElement("div");
-        dot.className = "carousel-dot" + (i === 0 ? " active" : "");
-        dot.addEventListener("click", () => goTo(i));
-        dotsContainer.appendChild(dot);
-    });
-
-    function getCardWidth() {
-        return cards[0].getBoundingClientRect().width + 16;
-    }
-
-    function goTo(index: number) {
-        currentIndex = Math.max(0, Math.min(index, cards.length - 1));
-        offset = -(currentIndex * getCardWidth());
-        track.style.transition =
-            "transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-        track.style.transform = `translateX(${offset}px)`;
-        dotsContainer.querySelectorAll(".carousel-dot").forEach((d, i) => {
-            d.classList.toggle("active", i === currentIndex);
+        // Dots
+        cards.forEach((_, i) => {
+            const dot = document.createElement("div");
+            dot.className = "carousel-dot" + (i === 0 ? " active" : "");
+            dot.addEventListener("click", () => goTo(i));
+            dotsContainer.appendChild(dot);
         });
-    }
 
-    btnNext.addEventListener("click", () => goTo(currentIndex + 1));
-    btnPrev.addEventListener("click", () => goTo(currentIndex - 1));
+        function getCardWidth() {
+            return cards[0].getBoundingClientRect().width + 16;
+        }
 
-    /// Drag
-    let isDragging = false;
-    let hasMoved = false;
-    let startX = 0;
-    let startOffset = 0;
+        function goTo(index: number) {
+            currentIndex = Math.max(0, Math.min(index, cards.length - 1));
+            offset = -(currentIndex * getCardWidth());
+            track.style.transition =
+                "transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            track.style.transform = `translateX(${offset}px)`;
+            dotsContainer.querySelectorAll(".carousel-dot").forEach((d, i) => {
+                d.classList.toggle("active", i === currentIndex);
+            });
+        }
 
-    wrap.addEventListener("mousedown", (e) => {
-        isDragging = true;
-        hasMoved = false;
-        startX = e.clientX;
-        startOffset = offset;
-        dragDelta = 0;
-        track.style.transition = "none";
-    });
+        btnNext.addEventListener("click", () => goTo(currentIndex + 1));
+        btnPrev.addEventListener("click", () => goTo(currentIndex - 1));
 
-    window.addEventListener("mousemove", (e) => {
-        if (!isDragging) return;
-        dragDelta = e.clientX - startX;
-        if (Math.abs(dragDelta) > 4) hasMoved = true;
-        track.style.transform = `translateX(${startOffset + dragDelta}px)`;
-    });
+        /// Drag
+        let isDragging = false;
+        let hasMoved = false;
+        let startX = 0;
+        let startOffset = 0;
 
-    window.addEventListener("mouseup", () => {
-        if (!isDragging) return;
-        isDragging = false;
-        const threshold = getCardWidth() * 0.2;
-        if (dragDelta < -threshold) goTo(currentIndex + 1);
-        else if (dragDelta > threshold) goTo(currentIndex - 1);
-        else goTo(currentIndex);
-    });
-
-    // Evitar navegación si hubo drag
-    cards.forEach((card) => {
-        card.addEventListener("click", (e) => {
-            if (hasMoved) {
-                e.preventDefault();
-                hasMoved = false;
-            }
+        wrap.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            hasMoved = false;
+            startX = e.clientX;
+            startOffset = offset;
+            dragDelta = 0;
+            track.style.transition = "none";
         });
-    });
 
-    // Touch
-    wrap.addEventListener("touchstart", (e) => {
-        startX = e.touches[0].clientX;
-        startOffset = offset;
-        dragDelta = 0;
-        track.style.transition = "none";
-    });
-
-    wrap.addEventListener("touchmove", (e) => {
-        dragDelta = e.touches[0].clientX - startX;
-        track.style.transform = `translateX(${startOffset + dragDelta}px)`;
-    });
-
-    wrap.addEventListener("touchend", () => {
-        if (dragDelta < -60) goTo(currentIndex + 1);
-        else if (dragDelta > 60) goTo(currentIndex - 1);
-        else goTo(currentIndex);
-    });
-
-    // Evitar navegación al hacer drag
-    cards.forEach((card) => {
-        card.addEventListener("click", (e) => {
-            if (Math.abs(dragDelta) > 8) e.preventDefault();
+        window.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            dragDelta = e.clientX - startX;
+            if (Math.abs(dragDelta) > 4) hasMoved = true;
+            track.style.transform = `translateX(${startOffset + dragDelta}px)`;
         });
-    });
 
-    goTo(0);
+        window.addEventListener("mouseup", () => {
+            if (!isDragging) return;
+            isDragging = false;
+            const threshold = getCardWidth() * 0.2;
+            if (dragDelta < -threshold) goTo(currentIndex + 1);
+            else if (dragDelta > threshold) goTo(currentIndex - 1);
+            else goTo(currentIndex);
+        });
+
+        // Evitar navegación si hubo drag
+        cards.forEach((card) => {
+            card.addEventListener("click", (e) => {
+                if (hasMoved) {
+                    e.preventDefault();
+                    hasMoved = false;
+                }
+            });
+        });
+
+        // Touch
+        wrap.addEventListener("touchstart", (e) => {
+            startX = e.touches[0].clientX;
+            startOffset = offset;
+            dragDelta = 0;
+            track.style.transition = "none";
+        });
+
+        wrap.addEventListener("touchmove", (e) => {
+            dragDelta = e.touches[0].clientX - startX;
+            track.style.transform = `translateX(${startOffset + dragDelta}px)`;
+        });
+
+        wrap.addEventListener("touchend", () => {
+            if (dragDelta < -60) goTo(currentIndex + 1);
+            else if (dragDelta > 60) goTo(currentIndex - 1);
+            else goTo(currentIndex);
+        });
+
+        // Evitar navegación al hacer drag
+        cards.forEach((card) => {
+            card.addEventListener("click", (e) => {
+                if (Math.abs(dragDelta) > 8) e.preventDefault();
+            });
+        });
+
+        goTo(0);
+    });
 </script>

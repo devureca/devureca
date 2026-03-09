@@ -18,16 +18,19 @@
 </style>
 
 <script>
-    const progress = document.getElementById("progress")!;
+    document.addEventListener("astro:page-load", () => {
+        const progress = document.getElementById("progress");
+        if (!progress) return;
 
-    function updateScroll() {
-        const scrollTop = window.scrollY;
-        const docHeight =
-            document.documentElement.scrollHeight - window.innerHeight;
-        progress.style.width = `${(scrollTop / docHeight) * 100}%`;
-        progress.style.background = "#E95420";
-    }
+        function updateScroll() {
+            const scrollTop = window.scrollY;
+            const docHeight =
+                document.documentElement.scrollHeight - window.innerHeight;
+            progress!.style.width = `${(scrollTop / docHeight) * 100}%`;
+            progress!.style.background = "#E95420";
+        }
 
-    window.addEventListener("scroll", updateScroll, { passive: true });
-    updateScroll();
+        window.addEventListener("scroll", updateScroll, { passive: true });
+        updateScroll();
+    });
 </script>

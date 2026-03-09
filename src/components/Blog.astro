@@ -123,16 +123,19 @@ console.log("posts encontrados:", posts.length);
 </style>
 
 <script>
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) entry.target.classList.add("visible");
-            });
-        },
-        { threshold: 0.12 },
-    );
+    document.addEventListener("astro:page-load", () => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting)
+                        entry.target.classList.add("visible");
+                });
+            },
+            { threshold: 0.12 },
+        );
 
-    document.querySelectorAll(".blog-item").forEach((el) => {
-        observer.observe(el);
+        document.querySelectorAll(".blog-item").forEach((el) => {
+            observer.observe(el);
+        });
     });
 </script>

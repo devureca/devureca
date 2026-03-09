@@ -7,26 +7,12 @@
         <div class="section-label">Sobre mí</div>
 
         <p class="about-text reveal">
-            Soy de <strong>Huancayo</strong>, Perú, una ciudad en el corazón de
-            los Andes a 3,200 metros de altura. Trabajo de forma independiente
-            desde aquí, construyendo productos globales desde lo que considero
-            el centro del mundo.
-        </p>
-
-        <p class="about-text reveal">
-            Fuera del código, me encontrarás leyendo <strong>cómics</strong>,
-            coleccionando
-            <strong>videojuegos</strong> o escuchando <strong>metal</strong>.
-            Estas tres pasiones me han hecho mejor diseñador y desarrollador:
-            cada una me enseñó, a su manera, sobre composición, sistemas
-            complejos y la importancia del detalle.
-        </p>
-
-        <p class="about-text reveal">
-            Tengo un compromiso firme con el <strong>código abierto</strong> y la
-            comunidad. Desarrollo herramientas gratuitas porque creo que la tecnología
-            debería estar al alcance de todos, eliminando las barreras económicas
-            para el aprendizaje y la creación.
+            Basado en <strong>Huancayo, Perú</strong>. Mi trabajo une la
+            complejidad de los sistemas con la apertura del open source,
+            convencido de que la tecnología de alto nivel no debería tener
+            barreras económicas. Cuando no programo, me pierdo entre <strong
+                >historietas</strong
+            > y <strong>videojuegos</strong>.
         </p>
 
         <div class="stack-grid reveal">
@@ -138,17 +124,20 @@
 </style>
 
 <script>
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) entry.target.classList.add("visible");
-            });
-        },
-        { threshold: 0.12 },
-    );
+    document.addEventListener("astro:page-load", () => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting)
+                        entry.target.classList.add("visible");
+                });
+            },
+            { threshold: 0.12 },
+        );
 
-    document.querySelectorAll("#about .reveal").forEach((el, i) => {
-        (el as HTMLElement).style.transitionDelay = `${i * 0.1}s`;
-        observer.observe(el);
+        document.querySelectorAll("#about .reveal").forEach((el, i) => {
+            (el as HTMLElement).style.transitionDelay = `${i * 0.1}s`;
+            observer.observe(el);
+        });
     });
 </script>

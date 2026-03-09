@@ -1,0 +1,110 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+
+const allPosts: CollectionEntry<"blog">[] = await getCollection("blog");
+
+const posts = allPosts.sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+);
+---
+
+<Layout title="Blog — Gianfranco Ureta">
+    <Nav />
+
+    <main>
+        <div class="col">
+            <a href="/" class="back">← Volver</a>
+
+            <div class="section-label">Todos los artículos</div>
+
+            {
+                posts.map((post) => (
+                    <a href={`/blog/${post.slug}`} class="blog-item">
+                        <span class="blog-title">{post.data.title}</span>
+                        <span class="blog-date">{post.data.date}</span>
+                    </a>
+                ))
+            }
+        </div>
+    </main>
+
+    <Footer />
+</Layout>
+
+<style>
+    main {
+        position: relative;
+        z-index: 2;
+        background: var(--bg);
+        min-height: 100vh;
+        padding: 120px 0 80px;
+    }
+
+    .back {
+        display: inline-block;
+        font-size: 12px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        text-decoration: none;
+        margin-bottom: 48px;
+        transition: color 0.2s;
+    }
+
+    .back:hover {
+        color: var(--text);
+    }
+
+    .section-label {
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 48px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-label::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+    }
+
+    .blog-item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: baseline;
+        gap: 16px;
+        padding: 20px 0;
+        border-bottom: 1px solid var(--border);
+        text-decoration: none;
+    }
+
+    .blog-item:first-of-type {
+        border-top: 1px solid var(--border);
+    }
+
+    .blog-title {
+        font-size: 17px;
+        color: var(--text);
+        transition: color 0.2s;
+        letter-spacing: 0.01em;
+    }
+
+    .blog-item:hover .blog-title {
+        color: var(--accent);
+    }
+
+    .blog-date {
+        font-size: 11px;
+        color: var(--text-muted);
+        white-space: nowrap;
+        letter-spacing: 0.08em;
+    }
+</style>

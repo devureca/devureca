@@ -27,61 +27,72 @@
 </style>
 
 <script>
-    const canvas = document.getElementById("mazeCanvas") as HTMLCanvasElement;
-    const wrap = document.getElementById("mazeWrap");
-    const ctx = canvas.getContext("2d")!;
+    function initMaze() {
+        const canvas = document.getElementById(
+            "mazeCanvas",
+        ) as HTMLCanvasElement;
+        const wrap = document.getElementById("mazeWrap");
+        if (!canvas || !wrap) return;
 
-    const SIZE = 96;
-    const CELL = 12;
+        const ctx = canvas.getContext("2d")!;
+        const SIZE = 96;
+        const CELL = 12;
 
-    type LineType = "diagonalDown" | "diagonalUp";
+        type LineType = "diagonalDown" | "diagonalUp";
 
-    function drawLine(x: number, y: number, type: LineType) {
-        ctx.beginPath();
-        if (type === "diagonalDown") {
-            ctx.moveTo(x, y);
-            ctx.lineTo(x + CELL, y + CELL);
-        } else {
-            ctx.moveTo(x, y + CELL);
-            ctx.lineTo(x + CELL, y);
+        function drawLine(x: number, y: number, type: LineType) {
+            ctx.beginPath();
+            if (type === "diagonalDown") {
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + CELL, y + CELL);
+            } else {
+                ctx.moveTo(x, y + CELL);
+                ctx.lineTo(x + CELL, y);
+            }
+            ctx.stroke();
         }
-        ctx.stroke();
-    }
 
-    function generate() {
-        const isLight = document.body.classList.contains("light");
-        const bg = isLight ? "#f5f5f0" : "#111111";
-        const stroke = isLight ? "rgba(0,0,0,0.7)" : "rgba(255,255,255,0.75)";
+        function generate() {
+            const isLight =
+                document.documentElement.classList.contains("light");
+            const bg = isLight ? "#f5f5f0" : "#090909";
+            const stroke = isLight
+                ? "rgba(0,0,0,0.7)"
+                : "rgba(255,255,255,0.75)";
 
-        ctx.clearRect(0, 0, SIZE, SIZE);
-        ctx.fillStyle = bg;
-        ctx.fillRect(0, 0, SIZE, SIZE);
-        ctx.strokeStyle = stroke;
-        ctx.lineWidth = 0.6;
-        ctx.lineCap = "square";
+            ctx.clearRect(0, 0, SIZE, SIZE);
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, SIZE, SIZE);
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = 0.6;
+            ctx.lineCap = "square";
 
-        for (let x = 0; x < SIZE; x += CELL) {
-            for (let y = 0; y < SIZE; y += CELL) {
-                const type: LineType =
-                    Math.random() > 0.5 ? "diagonalDown" : "diagonalUp";
-                drawLine(x, y, type);
+            for (let x = 0; x < SIZE; x += CELL) {
+                for (let y = 0; y < SIZE; y += CELL) {
+                    const type: LineType =
+                        Math.random() > 0.5 ? "diagonalDown" : "diagonalUp";
+                    drawLine(x, y, type);
+                }
             }
         }
+
+        wrap.addEventListener("click", () => {
+            canvas.style.opacity = "0";
+            canvas.style.transition = "opacity 0.15s ease";
+            setTimeout(() => {
+                generate();
+                canvas.style.opacity = "1";
+            }, 150);
+        });
+
+        document
+            .getElementById("themeToggle")
+            ?.addEventListener("click", () => {
+                setTimeout(generate, 50);
+            });
+
+        generate();
     }
 
-    wrap?.addEventListener("click", () => {
-        canvas.style.opacity = "0";
-        canvas.style.transition = "opacity 0.15s ease";
-        setTimeout(() => {
-            generate();
-            canvas.style.opacity = "1";
-        }, 150);
-    });
-
-    const themeToggle = document.getElementById("themeToggle");
-    themeToggle?.addEventListener("click", () => {
-        setTimeout(generate, 50);
-    });
-
-    document.addEventListener("DOMContentLoaded", generate);
+    document.addEventListener("astro:page-load", initMaze);
 </script>

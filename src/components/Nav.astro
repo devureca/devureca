@@ -2,9 +2,9 @@
 
 ---
 
-<nav id="nav">
+<nav id="nav" transition:persist>
     <div class="col">
-        <a href="/" class="nav-logo">devureca</a>
+        <a href="/" class="nav-logo">~/devureca</a>
         <div class="nav-right">
             <button id="themeToggle" aria-label="Toggle theme">
                 <span class="icon-dark">○</span>
@@ -35,7 +35,7 @@
         border-color: var(--border);
     }
 
-    body.light nav.scrolled {
+    :global(html.light) nav.scrolled {
         background: rgba(245, 245, 240, 0.95);
     }
 
@@ -118,20 +118,23 @@
 </style>
 
 <script>
-    const nav = document.getElementById("nav")!;
-    const toggle = document.getElementById("themeToggle")!;
+    document.addEventListener("astro:page-load", () => {
+        const nav = document.getElementById("nav");
+        const toggle = document.getElementById("themeToggle");
 
-    // Recuperar preferencia guardada
-    const saved = localStorage.getItem("theme");
-    if (saved === "light") document.body.classList.add("light");
+        const saved = localStorage.getItem("theme");
+        if (saved === "light") document.documentElement.classList.add("light");
 
-    toggle.addEventListener("click", () => {
-        document.body.classList.toggle("light");
-        const isLight = document.body.classList.contains("light");
-        localStorage.setItem("theme", isLight ? "light" : "dark");
-    });
+        toggle?.addEventListener("click", () => {
+            document.documentElement.classList.toggle("light");
+            const isLight =
+                document.documentElement.classList.contains("light");
+            localStorage.setItem("theme", isLight ? "light" : "dark");
+            document.dispatchEvent(new CustomEvent("themeChanged"));
+        });
 
-    window.addEventListener("scroll", () => {
-        nav.classList.toggle("scrolled", window.scrollY > 40);
+        window.addEventListener("scroll", () => {
+            nav?.classList.toggle("scrolled", window.scrollY > 40);
+        });
     });
 </script>

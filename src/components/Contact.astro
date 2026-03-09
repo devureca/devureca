@@ -135,17 +135,20 @@ const links = [
 </style>
 
 <script>
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) entry.target.classList.add("visible");
-            });
-        },
-        { threshold: 0.12 },
-    );
+    document.addEventListener("astro:page-load", () => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting)
+                        entry.target.classList.add("visible");
+                });
+            },
+            { threshold: 0.12 },
+        );
 
-    document.querySelectorAll("#contacto .reveal").forEach((el, i) => {
-        (el as HTMLElement).style.transitionDelay = `${i * 0.1}s`;
-        observer.observe(el);
+        document.querySelectorAll("#contacto .reveal").forEach((el, i) => {
+            (el as HTMLElement).style.transitionDelay = `${i * 0.1}s`;
+            observer.observe(el);
+        });
     });
 </script>
