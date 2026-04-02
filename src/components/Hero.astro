@@ -1,138 +1,287 @@
 ---
-import GitHubGraph from "./GitHubGraph.astro";
+
 ---
 
-<section id="hero">
-    <div class="col hero-inner">
-        <GitHubGraph />
+<section id="hero-section">
+    <div id="hero-lines" aria-hidden="true">
+        <svg id="hero-blueprint-svg" preserveAspectRatio="none"></svg>
+    </div>
 
-        <p class="hero-intro">
-            Hola — soy Gianfranco Ureta Carrera.<br />
-            <span class="hero-role-tag">Diseño & desarrollo</span> productos digitales
-            enfocados en el equilibrio entre la estética y la funcionalidad.
-        </p>
-
-        <div class="hero-bio-box">
-            Ayudo a fundadores a aterrizar ideas complejas a través de
-            interfaces intuitivas y arquitectura sólida. Mi enfoque es la
-            atención obsesiva al detalle: lo que marca la diferencia entre un
-            prototipo y un producto real.
-        </div>
-
-        <div class="hero-links">
-            <a href="#proyectos" class="link-primary">Ver proyectos</a>
-            <a href="#contacto" class="link-secondary">Hablemos</a>
-        </div>
+    <div id="hero-container">
+        <canvas
+            id="maze-canvas"
+            aria-label="Laberinto generativo, haz click para regenerar"
+        ></canvas>
+        <p id="maze-hint">click to regenerate</p>
     </div>
 </section>
 
 <style>
-    #hero {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        background: var(--bg);
-        padding: 140px 0 80px;
-    }
-
-    .hero-inner {
-        will-change: transform, opacity;
-        transform-origin: top center;
-    }
-
-    .hero-intro {
-        font-size: clamp(17px, 2.4vw, 22px);
-        line-height: 1.6;
-        color: var(--text);
-        margin-bottom: 28px;
-        font-weight: 400;
-    }
-
-    .hero-intro strong {
-        color: #fff;
-    }
-
-    .hero-role-tag {
-        display: inline;
-        background: var(--accent);
-        color: var(--bg);
-        padding: 1px 6px;
-        font-weight: 500;
-        transition: background 0.8s ease;
-    }
-
-    .hero-bio-box {
-        border: 1px dashed #333;
-        padding: 24px 28px;
-        font-size: clamp(13px, 1.6vw, 15px);
-        line-height: 1.75;
-        color: var(--text-dim);
-        margin-bottom: 40px;
-    }
-
-    .hero-bio-box strong {
-        color: var(--text);
-        font-weight: 500;
-    }
-
-    .hero-links {
+    #hero-section {
+        position: relative;
+        width: 100%;
         display: flex;
-        gap: 16px;
         align-items: center;
-        flex-wrap: wrap;
+        justify-content: center;
+        padding: 1.5rem 0;
     }
 
-    .link-primary {
-        font-size: 12px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--bg);
-        background: var(--text);
-        text-decoration: none;
-        padding: 10px 20px;
-        font-weight: 500;
-        transition: opacity 0.2s;
+    #hero-lines {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 1;
     }
 
-    .link-primary:hover {
-        opacity: 0.8;
+    #hero-blueprint-svg {
+        width: 100%;
+        height: 100%;
+        display: block;
     }
 
-    .link-secondary {
-        font-size: 12px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
+    #hero-container {
+        position: relative;
+        width: min(48rem, calc(100% - 2rem));
+        z-index: 2;
+        /* Usamos la variable de borde global para que cambie con el tema */
+        border: 0.5px solid var(--border-color);
+        border-radius: var(--nav-radius);
+        background: var(--bg-surface);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        overflow: hidden;
+        cursor: pointer;
+        padding: 1rem;
+        box-sizing: border-box;
+        transition: var(--theme-transition);
+    }
+
+    #maze-canvas {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    #maze-hint {
+        position: absolute;
+        bottom: 10px;
+        right: 14px;
+        font-family: var(--font-mono);
+        font-size: 10px;
         color: var(--text-muted);
-        text-decoration: none;
-        border-bottom: 1px solid var(--border);
-        padding-bottom: 2px;
-        transition:
-            color 0.2s,
-            border-color 0.2s;
+        margin: 0;
+        pointer-events: none;
+        letter-spacing: 0.05em;
+        opacity: 0;
+        transition: opacity 0.2s ease;
     }
 
-    .link-secondary:hover {
-        color: var(--text);
-        border-color: var(--text-dim);
+    #hero-container:hover #maze-hint {
+        opacity: 1;
     }
 </style>
 
 <script>
-    const heroInner = document.querySelector(".hero-inner") as HTMLElement;
-    const hero = document.getElementById("hero") as HTMLElement;
+    const container = document.getElementById("hero-container") as HTMLElement;
+    const canvas = document.getElementById("maze-canvas") as HTMLCanvasElement;
+    const ctx = canvas?.getContext("2d");
 
-    function updateHeroScale() {
-        const scrollTop = window.scrollY;
-        const heroH = hero.offsetHeight;
-        const progress = Math.min(scrollTop / heroH, 1);
+    const CELL_SIZE = 20;
+    const LINE_TYPES = {
+        DIAGONAL_DOWN: "diagonalDown",
+        DIAGONAL_UP: "diagonalUp",
+        CURVE_OVER_DOWN: "curveOverDown",
+        CURVE_UNDER_DOWN: "curveUnderDown",
+        CURVE_OVER_UP: "curveOverUp",
+        CURVE_UNDER_UP: "curveUnderUp",
+        BLOBS1: "blobs1",
+        BLOBS2: "blobs2",
+    };
 
-        const scale = 1 - progress * 0.12;
-        const opacity = 1 - progress * 0.6;
-        const translateY = -(progress * 24);
+    const LINE_OPTIONS = [LINE_TYPES.DIAGONAL_DOWN, LINE_TYPES.DIAGONAL_UP];
 
-        heroInner.style.transform = `scale(${scale}) translateY(${translateY}px)`;
-        heroInner.style.opacity = String(opacity);
+    function getStrokeColor() {
+        const isDark = !document.documentElement.classList.contains("light");
+        return isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)";
     }
 
-    window.addEventListener("scroll", updateHeroScale);
+    function getGridColor() {
+        const isDark = !document.documentElement.classList.contains("light");
+        return isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.07)";
+    }
+
+    function setupCanvas() {
+        if (!container || !canvas) return { cW: 0, cH: 0, cols: 0, rows: 0 };
+        const style = window.getComputedStyle(container);
+        const paddingX =
+            parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+        const W = container.clientWidth - paddingX;
+        const cols = Math.floor(W / CELL_SIZE);
+        const rows = Math.floor((W * 0.2) / CELL_SIZE);
+        const cW = cols * CELL_SIZE;
+        const cH = rows * CELL_SIZE;
+        canvas.width = cW;
+        canvas.height = cH;
+        canvas.style.aspectRatio = `${cW} / ${cH}`;
+        return { cW, cH, cols, rows };
+    }
+
+    function drawLine(
+        x: number,
+        y: number,
+        w: number,
+        h: number,
+        direction: string,
+    ) {
+        if (!ctx) return;
+        const half = h / 2;
+        ctx.beginPath();
+        switch (direction) {
+            case LINE_TYPES.DIAGONAL_DOWN:
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + w, y + h);
+                break;
+            case LINE_TYPES.DIAGONAL_UP:
+                ctx.moveTo(x, y + h);
+                ctx.lineTo(x + w, y);
+                break;
+            case LINE_TYPES.CURVE_OVER_DOWN:
+                ctx.moveTo(x, y);
+                ctx.quadraticCurveTo(x + w, y, x + w, y + h);
+                break;
+            case LINE_TYPES.CURVE_UNDER_DOWN:
+                ctx.moveTo(x, y);
+                ctx.quadraticCurveTo(x, y + h, x + w, y + h);
+                break;
+            case LINE_TYPES.CURVE_OVER_UP:
+                ctx.moveTo(x, y + h);
+                ctx.quadraticCurveTo(x, y, x + w, y);
+                break;
+            case LINE_TYPES.CURVE_UNDER_UP:
+                ctx.moveTo(x, y + h);
+                ctx.quadraticCurveTo(x + w, y + h, x + w, y);
+                break;
+            case LINE_TYPES.BLOBS1:
+                ctx.moveTo(x, y + half);
+                ctx.quadraticCurveTo(x + half, y + half, x + half, y);
+                ctx.moveTo(x + half, y + h);
+                ctx.quadraticCurveTo(x + half, y + half, x + w, y + half);
+                break;
+            case LINE_TYPES.BLOBS2:
+                ctx.moveTo(x, y + half);
+                ctx.quadraticCurveTo(x + half, y + half, x + half, y + h);
+                ctx.moveTo(x + half, y);
+                ctx.quadraticCurveTo(x + half, y + half, x + w, y + half);
+                break;
+        }
+        ctx.stroke();
+    }
+
+    function drawMaze() {
+        if (!ctx) return;
+        const { cW, cH } = setupCanvas();
+        ctx.clearRect(0, 0, cW, cH);
+        const strokeColor = getStrokeColor();
+        const gridColor = getGridColor();
+        for (let x = 0; x < cW; x += CELL_SIZE) {
+            for (let y = 0; y < cH; y += CELL_SIZE) {
+                ctx.save();
+                ctx.lineWidth = 0.5;
+                ctx.strokeStyle = gridColor;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + CELL_SIZE, y);
+                ctx.moveTo(x, y);
+                ctx.lineTo(x, y + CELL_SIZE);
+                ctx.stroke();
+                ctx.restore();
+                const rand = Math.floor(Math.random() * LINE_OPTIONS.length);
+                ctx.save();
+                ctx.lineWidth = 1.2;
+                ctx.strokeStyle = strokeColor;
+                ctx.lineCap = "round";
+                drawLine(x, y, CELL_SIZE, CELL_SIZE, LINE_OPTIONS[rand]);
+                ctx.restore();
+            }
+        }
+    }
+
+    function drawHeroBlueprint() {
+        const section = document.getElementById("hero-section");
+        const box = document.getElementById("hero-container");
+        const svg = document.getElementById("hero-blueprint-svg");
+        if (!section || !box || !svg) return;
+
+        const W = section.offsetWidth;
+        const H = section.offsetHeight;
+
+        // Usamos offset para evitar problemas con el scroll durante el cálculo
+        const nL = box.offsetLeft;
+        const nR = box.offsetLeft + box.offsetWidth;
+        const nT = box.offsetTop;
+        const nB = box.offsetTop + box.offsetHeight;
+
+        const isDark = !document.documentElement.classList.contains("light");
+        const stroke = isDark
+            ? "rgba(255, 255, 255, 0.25)"
+            : "rgba(0, 0, 0, 0.12)";
+        const dotFill = isDark
+            ? "rgba(255, 255, 255, 0.45)"
+            : "rgba(0, 0, 0, 0.25)";
+        const sw = "0.8";
+
+        let markup = "";
+
+        // Líneas Horizontales
+        [nT, nB].forEach((y) => {
+            markup += `<line x1="0" y1="${y}" x2="${nL}" y2="${y}" stroke="${stroke}" stroke-width="${sw}"/>`;
+            markup += `<line x1="${nR}" y1="${y}" x2="${W}" y2="${y}" stroke="${stroke}" stroke-width="${sw}"/>`;
+        });
+
+        // Líneas Verticales (Sin IFs restrictivos)
+        [nL, nR].forEach((x) => {
+            markup += `<line x1="${x}" y1="0" x2="${x}" y2="${nT}" stroke="${stroke}" stroke-width="${sw}"/>`;
+            markup += `<line x1="${x}" y1="${nB}" x2="${x}" y2="${H}" stroke="${stroke}" stroke-width="${sw}"/>`;
+        });
+
+        // Puntos de anclaje
+        [
+            [nL, nT],
+            [nR, nT],
+            [nL, nB],
+            [nR, nB],
+        ].forEach(([cx, cy]) => {
+            markup += `<circle cx="${cx}" cy="${cy}" r="2" fill="${dotFill}"/>`;
+        });
+
+        svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+        svg.innerHTML = markup;
+    }
+
+    function init() {
+        if (canvas && container) {
+            drawMaze();
+            drawHeroBlueprint();
+            // Ejecutamos una segunda vez después de un respiro para corregir posiciones
+            setTimeout(drawHeroBlueprint, 100);
+        }
+    }
+
+    container?.addEventListener("click", () => {
+        drawMaze();
+        drawHeroBlueprint();
+    });
+
+    window.addEventListener("resize", () => {
+        drawMaze();
+        drawHeroBlueprint();
+    });
+
+    document.documentElement.addEventListener("themechange", () => {
+        drawMaze();
+        drawHeroBlueprint();
+    });
+
+    init();
 </script>

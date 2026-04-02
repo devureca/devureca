@@ -1,133 +1,148 @@
 ---
 const projects = [
     {
-        slug: "proyecto-uno",
-        name: "Proyecto Uno",
+        slug: "qollqastore",
+        name: "QollqaStore",
+        year: "2026",
+        tags: ["Astro", "Google Sheets", "Open Source"],
+        desc: "Catálogo web gratuito para emprendedores que utiliza Google Sheets como base de datos.",
+        image: "https://res.cloudinary.com/dpabb0ryo/image/upload/q_auto/f_auto/v1775147595/qollqastore.com_jukicx.png",
+    },
+    {
+        slug: "devureca-portfolio",
+        name: "Devureca",
+        year: "2026",
+        tags: ["Astro", "TypeScript", "Design"],
+        desc: "Portafolio profesional con estética de planos técnicos y branding minimalista.",
+        image: "/images/devureca.jpg",
+    },
+    {
+        slug: "price-charting-peru",
+        name: "Price Charting PE",
         year: "2024",
-        tags: ["React", "TypeScript", "Node.js"],
-        desc: "Plataforma SaaS para equipos de diseño. Gestión de assets, handoff y documentación en un solo lugar.",
-    },
-    {
-        slug: "proyecto-dos",
-        name: "Proyecto Dos",
-        year: "2024",
-        tags: ["Mobile", "Swift", "Figma"],
-        desc: "App móvil para seguimiento de hábitos. Diseño y desarrollo completo desde cero.",
-    },
-    {
-        slug: "proyecto-tres",
-        name: "Proyecto Tres",
-        year: "2023",
-        tags: ["Dashboard", "D3.js", "Design System"],
-        desc: "Dashboard de analytics con visualizaciones complejas y sistema de diseño con 80+ componentes.",
-    },
-    {
-        slug: "proyecto-cuatro",
-        name: "Proyecto Cuatro",
-        year: "2023",
-        tags: ["Astro", "Tailwind", "CMS"],
-        desc: "Sitio editorial con CMS headless, optimizado para velocidad y SEO. 100/100 en Lighthouse.",
-    },
-    {
-        slug: "proyecto-cinco",
-        name: "Proyecto Cinco",
-        year: "2022",
-        tags: ["Next.js", "Postgres", "Auth"],
-        desc: "Plataforma de comunidad con sistema de auth propio, perfiles y contenido generado por usuarios.",
+        tags: ["Next.js", "Scraping", "Games"],
+        desc: "Herramienta de tracking de precios para el mercado de videojuegos en Perú.",
+        image: "/images/pricecharting.jpg",
     },
 ];
 ---
 
-<section id="proyectos">
-    <div class="col">
-        <div class="section-label">Proyectos seleccionados</div>
+<section class="projects-section" id="projects-section">
+    <div class="projects-lines">
+        <svg id="projects-blueprint-svg"></svg>
     </div>
 
-    <div class="carousel-outer">
-        <div class="carousel-track-wrap" id="carouselWrap">
-            <div class="carousel-track" id="carouselTrack">
-                {
-                    projects.map((p) => (
-                        <div class="project-card">
-                            <div class="card-img">
-                                <div class="card-overlay">
-                                    <div class="card-overlay-top">
-                                        <div class="card-tags">
-                                            {p.tags.map((t) => (
-                                                <span class="card-tag">
-                                                    {t}
-                                                </span>
-                                            ))}
+    <div class="projects-container" id="projects-container">
+        <div class="section-header" id="projects-header-box">
+            <span class="section-label">Proyectos seleccionados</span>
+        </div>
+
+        <div class="carousel-outer" id="carousel-main-box">
+            <div class="carousel-track-wrap" id="carouselWrap">
+                <div class="carousel-track" id="carouselTrack">
+                    {
+                        projects.map((p) => (
+                            <div class="project-card">
+                                <div class="card-img-wrapper">
+                                    <img
+                                        src={p.image}
+                                        alt={p.name}
+                                        class="project-image"
+                                    />
+
+                                    <div class="card-overlay">
+                                        <div class="card-overlay-top">
+                                            <div class="card-tags">
+                                                {p.tags.map((t) => (
+                                                    <span class="card-tag">
+                                                        {t}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <span class="card-arrow">↗</span>
                                         </div>
-                                        <span class="card-arrow">↗</span>
-                                    </div>
-                                    <div class="card-overlay-bottom">
-                                        <div class="card-title">{p.name}</div>
-                                        <div class="card-desc">{p.desc}</div>
+                                        <div class="card-overlay-bottom">
+                                            <div class="card-title">
+                                                {p.name}
+                                            </div>
+                                            <div class="card-desc">
+                                                {p.desc}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="card-foot">
+                                    <span class="card-name">{p.name}</span>
+                                    <span class="card-year">{p.year}</span>
+                                </div>
                             </div>
-                            <div class="card-foot">
-                                <a
-                                    href={`/proyectos/${p.slug}`}
-                                    class="card-name"
-                                >
-                                    {p.name}
-                                </a>
-                                <span class="card-year">{p.year}</span>
-                            </div>
-                        </div>
-                    ))
-                }
+                        ))
+                    }
+                </div>
             </div>
         </div>
 
-        <div class="carousel-nav">
-            <button class="carousel-btn" id="btnPrev">←</button>
-            <button class="carousel-btn" id="btnNext">→</button>
-            <div class="carousel-dots" id="carouselDots"></div>
+        <div class="carousel-controls" id="projects-footer-box">
+            <div class="carousel-nav">
+                <button class="carousel-btn" id="btnPrev">←</button>
+                <button class="carousel-btn" id="btnNext">→</button>
+            </div>
         </div>
     </div>
 </section>
 
 <style>
-    #proyectos {
+    .projects-section {
         position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        background: transparent;
+        margin-top: -1px;
+    }
+
+    .projects-lines {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    #projects-blueprint-svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    .projects-container {
+        position: relative;
+        width: min(48rem, calc(100% - 2rem));
+        display: flex;
+        flex-direction: column;
         z-index: 2;
-        background: var(--bg);
-        padding: 80px 0;
+    }
+
+    .section-header {
+        padding: 1.5rem;
     }
 
     .section-label {
+        font-family: var(--font-mono);
         font-size: 11px;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
-        color: var(--text-muted);
-        margin-bottom: 32px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .section-label::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: var(--border);
+        color: var(--text-primary);
     }
 
     .carousel-outer {
-        width: 100vw;
-        left: 50%;
-        position: relative;
-        transform: translateX(-50%);
+        width: 100%;
         overflow: hidden;
+        padding: 2rem 1.5rem;
     }
 
     .carousel-track-wrap {
-        overflow: hidden;
         cursor: grab;
-        padding: 8px 0 16px;
     }
 
     .carousel-track-wrap:active {
@@ -136,54 +151,62 @@ const projects = [
 
     .carousel-track {
         display: flex;
-        gap: 16px;
-        padding: 0 max(24px, calc((100vw - 660px) / 2));
-        width: max-content;
+        gap: 24px;
         will-change: transform;
         user-select: none;
     }
 
     .project-card {
-        width: 440px;
+        width: 380px;
         flex-shrink: 0;
-        cursor: pointer;
-        text-decoration: none;
     }
 
-    .card-img {
+    .card-img-wrapper {
         width: 100%;
-        aspect-ratio: 16/10;
-        background: var(--bg-2);
-        border: 1px solid var(--border);
+        aspect-ratio: 16/9;
+        border: 1px solid var(--border-color);
         position: relative;
         overflow: hidden;
+        background: var(--bg-surface);
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .project-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition:
+            opacity 0.4s ease,
+            transform 0.6s ease;
+        display: block;
+        opacity: 1;
+    }
+
+    .project-card:hover .project-image {
+        opacity: 0;
+        transform: scale(1.03);
     }
 
     .card-overlay {
         position: absolute;
         inset: 0;
-        background: var(--bg);
-        border: 1px solid var(--border);
+        background: var(--bg-surface);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         padding: 24px;
         opacity: 0;
-        transform: translateY(6px);
+        visibility: hidden;
         transition:
-            opacity 0.3s ease,
-            transform 0.3s ease;
+            opacity 0.4s ease,
+            visibility 0.4s ease;
+        z-index: 2;
     }
 
     .project-card:hover .card-overlay {
         opacity: 1;
-        transform: translateY(0);
-    }
-
-    .card-overlay-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
+        visibility: visible;
     }
 
     .card-tags {
@@ -193,224 +216,193 @@ const projects = [
     }
 
     .card-tag {
-        font-size: 10px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        padding: 4px 8px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: var(--text-dim);
+        font-family: var(--font-mono);
+        font-size: 9px;
+        padding: 3px 7px;
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        letter-spacing: 0.05em;
     }
 
     .card-arrow {
-        font-size: 18px;
-        color: var(--accent);
-        transition: transform 0.2s ease;
-    }
-
-    .project-card:hover .card-arrow {
-        transform: translate(3px, -3px);
+        color: var(--text-primary);
+        font-size: 14px;
     }
 
     .card-title {
-        font-size: 22px;
-        color: var(--text);
-        margin-bottom: 8px;
-        letter-spacing: 0.01em;
+        font-family: var(--font-sans);
+        font-size: 1.4rem;
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 7px;
+        letter-spacing: -0.01em;
     }
 
     .card-desc {
-        font-size: 12px;
-        color: var(--text-dim);
-        line-height: 1.7;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--text-muted);
+        line-height: 1.6;
+        font-weight: 300;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .card-foot {
         display: flex;
         justify-content: space-between;
-        align-items: baseline;
-        margin-top: 14px;
+        margin-top: 12px;
+        font-family: var(--font-mono);
+        font-size: 12px;
         padding: 0 2px;
     }
 
     .card-name {
-        font-size: 13px;
-        color: var(--text-dim);
-        letter-spacing: 0.04em;
-        text-decoration: none;
-        transition: color 0.2s;
-    }
-
-    .card-name:hover {
-        color: var(--text);
+        color: var(--text-primary);
     }
 
     .card-year {
-        font-size: 11px;
-        color: var(--border);
-        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        opacity: 0.6;
+    }
+
+    .carousel-controls {
+        padding: 1.5rem;
     }
 
     .carousel-nav {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin-top: 24px;
-        padding: 0 max(24px, calc((100vw - 660px) / 2));
+        gap: 12px;
     }
 
     .carousel-btn {
-        width: 36px;
-        height: 36px;
-        border: 1px solid var(--border);
         background: transparent;
-        color: var(--text-muted);
-        font-size: 16px;
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 5px 15px;
         cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition:
-            border-color 0.2s,
-            color 0.2s;
+        font-family: var(--font-mono);
+        transition: all 0.2s ease;
     }
 
     .carousel-btn:hover {
-        border-color: var(--text-muted);
-        color: var(--text);
-    }
-
-    .carousel-dots {
-        display: flex;
-        gap: 6px;
-        margin-left: 8px;
-    }
-
-    .carousel-dot {
-        width: 4px;
-        height: 4px;
-        background: var(--border);
-        border-radius: 50%;
-        cursor: pointer;
-        transition:
-            background 0.3s,
-            transform 0.3s;
-    }
-
-    .carousel-dot.active {
-        background: var(--accent);
-        transform: scale(1.4);
+        background: var(--text-primary);
+        color: var(--bg-body);
+        border-color: var(--text-primary);
     }
 </style>
 
 <script>
-    document.addEventListener("astro:page-load", () => {
+    function initCarousel() {
         const track = document.getElementById("carouselTrack") as HTMLElement;
-        if (!track) return;
         const wrap = document.getElementById("carouselWrap") as HTMLElement;
         const btnPrev = document.getElementById("btnPrev") as HTMLElement;
         const btnNext = document.getElementById("btnNext") as HTMLElement;
-        const dotsContainer = document.getElementById(
-            "carouselDots",
-        ) as HTMLElement;
-        const cards = track.querySelectorAll<HTMLElement>(".project-card");
+        const cards = document.querySelectorAll(".project-card");
+
+        if (!track || !wrap || !cards.length) return;
 
         let currentIndex = 0;
-        let offset = 0;
-        let dragDelta = 0;
+        let startX = 0;
+        let isDragging = false;
 
-        // Dots
-        cards.forEach((_, i) => {
-            const dot = document.createElement("div");
-            dot.className = "carousel-dot" + (i === 0 ? " active" : "");
-            dot.addEventListener("click", () => goTo(i));
-            dotsContainer.appendChild(dot);
-        });
-
-        function getCardWidth() {
-            return cards[0].getBoundingClientRect().width + 16;
+        function getMoveDistance(): number {
+            return (cards[0] as HTMLElement).clientWidth + 24;
         }
 
         function goTo(index: number) {
             currentIndex = Math.max(0, Math.min(index, cards.length - 1));
-            offset = -(currentIndex * getCardWidth());
+            const offset = -(currentIndex * getMoveDistance());
             track.style.transition =
-                "transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+                "transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)";
             track.style.transform = `translateX(${offset}px)`;
-            dotsContainer.querySelectorAll(".carousel-dot").forEach((d, i) => {
-                d.classList.toggle("active", i === currentIndex);
-            });
         }
 
-        btnNext.addEventListener("click", () => goTo(currentIndex + 1));
-        btnPrev.addEventListener("click", () => goTo(currentIndex - 1));
+        btnNext?.addEventListener("click", () => goTo(currentIndex + 1));
+        btnPrev?.addEventListener("click", () => goTo(currentIndex - 1));
 
-        /// Drag
-        let isDragging = false;
-        let hasMoved = false;
-        let startX = 0;
-        let startOffset = 0;
-
-        wrap.addEventListener("mousedown", (e) => {
+        wrap.addEventListener("mousedown", (e: MouseEvent) => {
             isDragging = true;
-            hasMoved = false;
             startX = e.clientX;
-            startOffset = offset;
-            dragDelta = 0;
             track.style.transition = "none";
         });
 
-        window.addEventListener("mousemove", (e) => {
+        window.addEventListener("mousemove", (e: MouseEvent) => {
             if (!isDragging) return;
-            dragDelta = e.clientX - startX;
-            if (Math.abs(dragDelta) > 4) hasMoved = true;
-            track.style.transform = `translateX(${startOffset + dragDelta}px)`;
+            const delta = e.clientX - startX;
+            const baseOffset = -(currentIndex * getMoveDistance());
+            track.style.transform = `translateX(${baseOffset + delta}px)`;
         });
 
-        window.addEventListener("mouseup", () => {
+        window.addEventListener("mouseup", (e: MouseEvent) => {
             if (!isDragging) return;
             isDragging = false;
-            const threshold = getCardWidth() * 0.2;
-            if (dragDelta < -threshold) goTo(currentIndex + 1);
-            else if (dragDelta > threshold) goTo(currentIndex - 1);
+            const delta = e.clientX - startX;
+            if (delta < -100) goTo(currentIndex + 1);
+            else if (delta > 100) goTo(currentIndex - 1);
             else goTo(currentIndex);
         });
+    }
 
-        // Evitar navegación si hubo drag
-        cards.forEach((card) => {
-            card.addEventListener("click", (e) => {
-                if (hasMoved) {
-                    e.preventDefault();
-                    hasMoved = false;
-                }
+    function drawProjectsBlueprint() {
+        const section = document.getElementById("projects-section");
+        const container = document.getElementById("projects-container");
+        const header = document.getElementById("projects-header-box");
+        const main = document.getElementById("carousel-main-box");
+        const svg = document.getElementById(
+            "projects-blueprint-svg",
+        ) as unknown as SVGSVGElement;
+
+        if (!section || !container || !header || !main || !svg) return;
+
+        const W = section.offsetWidth;
+        const H = section.offsetHeight;
+        const nL = container.offsetLeft;
+        const nR = container.offsetLeft + container.offsetWidth;
+
+        const t1 = 0;
+        const t2 = header.offsetHeight;
+        const t3 = header.offsetHeight + main.offsetHeight;
+        const t4 = H;
+
+        const isDark = !document.documentElement.classList.contains("light");
+        const stroke = isDark
+            ? "rgba(255, 255, 255, 0.1)"
+            : "rgba(0, 0, 0, 0.08)";
+        const dotFill = isDark
+            ? "rgba(255, 255, 255, 0.3)"
+            : "rgba(0, 0, 0, 0.2)";
+
+        let markup = "";
+        [t1, t2, t3, t4].forEach((y) => {
+            markup += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${stroke}" stroke-width="0.8"/>`;
+        });
+
+        [nL, nR].forEach((x) => {
+            markup += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="${stroke}" stroke-width="0.8"/>`;
+        });
+
+        [t1, t2, t3, t4].forEach((y) => {
+            [nL, nR].forEach((x) => {
+                markup += `<circle cx="${x}" cy="${y}" r="2" fill="${dotFill}"/>`;
             });
         });
 
-        // Touch
-        wrap.addEventListener("touchstart", (e) => {
-            startX = e.touches[0].clientX;
-            startOffset = offset;
-            dragDelta = 0;
-            track.style.transition = "none";
-        });
+        svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+        svg.innerHTML = markup;
+    }
 
-        wrap.addEventListener("touchmove", (e) => {
-            dragDelta = e.touches[0].clientX - startX;
-            track.style.transform = `translateX(${startOffset + dragDelta}px)`;
-        });
-
-        wrap.addEventListener("touchend", () => {
-            if (dragDelta < -60) goTo(currentIndex + 1);
-            else if (dragDelta > 60) goTo(currentIndex - 1);
-            else goTo(currentIndex);
-        });
-
-        // Evitar navegación al hacer drag
-        cards.forEach((card) => {
-            card.addEventListener("click", (e) => {
-                if (Math.abs(dragDelta) > 8) e.preventDefault();
-            });
-        });
-
-        goTo(0);
+    document.addEventListener("astro:page-load", () => {
+        initCarousel();
+        drawProjectsBlueprint();
     });
+
+    window.addEventListener("resize", drawProjectsBlueprint);
+    document.documentElement.addEventListener(
+        "themechange",
+        drawProjectsBlueprint,
+    );
 </script>

@@ -1,140 +1,392 @@
 ---
-
+// Navbar.astro — ~/devureca new-design branch
+// Theme: dark por defecto, clase "light" en <html> para modo claro (igual que Layout.astro)
 ---
 
-<nav id="nav" transition:persist>
-    <div class="col">
-        <a href="/" class="nav-logo">~/devureca</a>
-        <div class="nav-right">
-            <button id="themeToggle" aria-label="Toggle theme">
-                <span class="icon-dark">○</span>
-                <span class="icon-light">●</span>
-            </button>
-            <a href="#contacto" class="nav-cta">Hablemos</a>
-        </div>
+<header id="site-header">
+    <div id="nav-lines" aria-hidden="true">
+        <svg id="blueprint-svg" preserveAspectRatio="none"></svg>
     </div>
-</nav>
+
+    <nav id="navbar">
+        <a href="/" class="nav-brand">
+            <span class="brand-slash">~/</span>devureca
+        </a>
+
+        <div
+            class="nav-clock"
+            id="nav-clock"
+            aria-label="Hora en Huancayo, Perú"
+        >
+            00:00:00
+        </div>
+
+        <div class="nav-actions">
+            <button
+                id="theme-toggle"
+                aria-label="Cambiar tema"
+                title="Cambiar tema"
+            >
+                <svg
+                    id="icon-moon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"
+                    ></path>
+                </svg>
+                <svg
+                    id="icon-sun"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+
+            <button
+                id="menu-toggle"
+                aria-label="Abrir menú"
+                aria-expanded="false"
+                aria-controls="nav-drawer"
+            >
+                <span class="ham-line"></span>
+                <span class="ham-line"></span>
+                <span class="ham-line"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div id="nav-drawer" role="menu" aria-hidden="true">
+        <a href="/logs" role="menuitem" class="drawer-item">
+            <span class="drawer-name">Logs</span>
+            <span class="drawer-tag">blog</span>
+        </a>
+        <div class="drawer-divider"></div>
+        <a href="/portfolio" role="menuitem" class="drawer-item">
+            <span class="drawer-name">Portfolio</span>
+            <span class="drawer-tag">trabajos</span>
+        </a>
+        <div class="drawer-divider"></div>
+        <a href="/labs" role="menuitem" class="drawer-item">
+            <span class="drawer-name">Labs</span>
+            <span class="drawer-tag">opensource</span>
+        </a>
+    </div>
+</header>
 
 <style>
-    nav {
-        position: fixed;
+    :root {
+        --nav-height: 54px;
+        --nav-max-width: 48rem;
+    }
+
+    #site-header {
+        position: sticky;
         top: 0;
-        left: 0;
-        right: 0;
         z-index: 100;
-        padding: 20px 0;
-        transition:
-            border-color 0.3s,
-            background 0.3s;
-        border-bottom: 1px solid transparent;
-    }
-
-    nav.scrolled {
-        background: rgba(9, 9, 9, 0.95);
-        backdrop-filter: blur(12px);
-        border-color: var(--border);
-    }
-
-    :global(html.light) nav.scrolled {
-        background: rgba(245, 245, 240, 0.95);
-    }
-
-    .col {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .nav-right {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-    }
-
-    .nav-logo {
-        font-family: "DM Mono", monospace;
-        font-size: 15px;
-        color: var(--text);
-        text-decoration: none;
-        font-weight: 500;
-        letter-spacing: 0.04em;
-        transition: color 0.3s;
-    }
-
-    .nav-cta {
-        font-family: "DM Mono", monospace;
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--bg);
-        background: var(--accent);
-        text-decoration: none;
-        padding: 8px 16px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        transition:
-            opacity 0.2s,
-            background 0.8s ease;
-    }
-
-    .nav-cta:hover {
-        opacity: 0.85;
-    }
-
-    #themeToggle {
-        background: none;
-        border: 1px solid var(--border);
-        color: var(--text-muted);
-        font-size: 16px;
-        width: 32px;
-        height: 32px;
-        cursor: pointer;
+        width: 100%;
+        height: var(--nav-height);
         display: flex;
         align-items: center;
         justify-content: center;
-        transition:
-            border-color 0.2s,
-            color 0.2s;
+    }
+
+    #nav-lines {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    #blueprint-svg {
+        width: 100%;
+        height: 100%;
+    }
+
+    #navbar {
+        position: relative;
+        width: min(var(--nav-max-width), calc(100% - 2rem));
+        height: var(--nav-height);
+        background: var(--bg-surface);
+        border: 0.5px solid var(--border-color);
+        border-radius: var(--nav-radius);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.25rem;
+        z-index: 2;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: var(--theme-transition);
+    }
+
+    .nav-brand {
+        font-family: var(--font-mono);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-primary);
+        text-decoration: none;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+    }
+
+    .brand-slash {
+        color: var(--text-muted);
+        font-weight: 400;
+    }
+
+    .nav-clock {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: var(--text-primary);
+        opacity: 0.8;
+        letter-spacing: 0.04em;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .nav-actions button {
+        background: none;
+        border: none;
         padding: 0;
+        cursor: pointer;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.15s;
     }
 
-    #themeToggle:hover {
-        border-color: var(--text-muted);
-        color: var(--text);
+    .nav-actions button:hover {
+        opacity: 0.6;
     }
 
-    .icon-light {
+    #menu-toggle {
+        flex-direction: column;
+        gap: 4px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .ham-line {
+        display: block;
+        width: 16px;
+        height: 1.5px;
+        background: currentColor;
+        border-radius: 2px;
+        transition:
+            transform 0.2s,
+            opacity 0.2s;
+        transform-origin: center;
+    }
+
+    #menu-toggle[aria-expanded="true"] .ham-line:nth-child(1) {
+        transform: translateY(5.5px) rotate(45deg);
+    }
+
+    #menu-toggle[aria-expanded="true"] .ham-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    #menu-toggle[aria-expanded="true"] .ham-line:nth-child(3) {
+        transform: translateY(-5.5px) rotate(-45deg);
+    }
+
+    #nav-drawer {
+        position: absolute;
+        top: calc(var(--nav-height) + 6px);
+        right: max(1rem, calc((100% - var(--nav-max-width)) / 2 + 1.25rem));
+        width: 180px;
+        background: var(--bg-drawer);
+        border: 0.5px solid var(--border-color);
+        border-radius: var(--nav-radius);
+        padding: 6px 0;
+        z-index: 200;
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
+        transform-origin: top right;
+        pointer-events: none;
+        transition:
+            opacity 0.15s,
+            transform 0.15s,
+            background 0.25s;
+    }
+
+    #nav-drawer[aria-hidden="false"] {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+    }
+
+    .drawer-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 9px 16px;
+        text-decoration: none;
+        color: var(--text-primary);
+        transition: background 0.1s;
+    }
+
+    .drawer-item:hover {
+        background: rgba(128, 128, 128, 0.08);
+    }
+
+    .drawer-name {
+        font-size: 13px;
+    }
+
+    .drawer-tag {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--text-muted);
+    }
+
+    .drawer-divider {
+        height: 0.5px;
+        background: var(--border-color);
+        margin: 3px 12px;
+    }
+
+    #icon-sun {
         display: none;
     }
-    .icon-dark {
-        display: block;
+
+    :root.light #icon-moon {
+        display: none;
     }
 
-    body.light .icon-light {
+    :root.light #icon-sun {
         display: block;
-    }
-    body.light .icon-dark {
-        display: none;
     }
 </style>
 
 <script>
-    document.addEventListener("astro:page-load", () => {
-        const nav = document.getElementById("nav");
-        const toggle = document.getElementById("themeToggle");
+    // ── Clock ──────────────────────────────────────────────
+    function updateClock() {
+        const el = document.getElementById("nav-clock");
+        if (!el) return;
+        el.textContent = new Intl.DateTimeFormat("es-PE", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+            timeZone: "America/Lima",
+        }).format(new Date());
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
 
-        const saved = localStorage.getItem("theme");
-        if (saved === "light") document.documentElement.classList.add("light");
+    // ── Blueprint lines ─────────────────────────────────────
+    function drawBlueprint() {
+        const header = document.getElementById("site-header");
+        const navbar = document.getElementById("navbar");
+        const svg = document.getElementById("blueprint-svg");
+        if (!header || !navbar || !svg) return;
 
-        toggle?.addEventListener("click", () => {
-            document.documentElement.classList.toggle("light");
-            const isLight =
-                document.documentElement.classList.contains("light");
-            localStorage.setItem("theme", isLight ? "light" : "dark");
-            document.dispatchEvent(new CustomEvent("themeChanged"));
+        const W = header.offsetWidth;
+        const H = header.offsetHeight;
+        const rect = navbar.getBoundingClientRect();
+        const hRect = header.getBoundingClientRect();
+        const nL = rect.left - hRect.left;
+        const nR = rect.right - hRect.left;
+        const nT = rect.top - hRect.top;
+        const nB = rect.bottom - hRect.top;
+
+        const light = document.documentElement.classList.contains("light");
+        const stroke = light ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.25)";
+        const dot = light ? "rgba(0,0,0,0.25)" : "rgba(255,255,255,0.45)";
+        const sw = "0.8";
+
+        let m = "";
+        [nT, nB].forEach((y) => {
+            m += `<line x1="0" y1="${y}" x2="${nL}" y2="${y}" stroke="${stroke}" stroke-width="${sw}"/>`;
+            m += `<line x1="${nR}" y1="${y}" x2="${W}" y2="${y}" stroke="${stroke}" stroke-width="${sw}"/>`;
+        });
+        [nL, nR].forEach((x) => {
+            if (nT > 0)
+                m += `<line x1="${x}" y1="0" x2="${x}" y2="${nT}" stroke="${stroke}" stroke-width="${sw}"/>`;
+            if (nB < H)
+                m += `<line x1="${x}" y1="${nB}" x2="${x}" y2="${H}" stroke="${stroke}" stroke-width="${sw}"/>`;
+        });
+        [
+            [nL, nT],
+            [nR, nT],
+            [nL, nB],
+            [nR, nB],
+        ].forEach(([cx, cy]) => {
+            m += `<circle cx="${cx}" cy="${cy}" r="2" fill="${dot}"/>`;
         });
 
-        window.addEventListener("scroll", () => {
-            nav?.classList.toggle("scrolled", window.scrollY > 40);
-        });
+        svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+        svg.innerHTML = m;
+    }
+
+    drawBlueprint();
+    window.addEventListener("resize", drawBlueprint);
+
+    // ── Theme toggle ────────────────────────────────────────
+    document.getElementById("theme-toggle")?.addEventListener("click", () => {
+        const isLight = document.documentElement.classList.toggle("light");
+        localStorage.setItem("theme", isLight ? "light" : "dark");
+        drawBlueprint();
+        document.documentElement.dispatchEvent(new CustomEvent("themechange"));
+    });
+
+    // ── Hamburger ───────────────────────────────────────────
+    const menuBtn = document.getElementById("menu-toggle");
+    const drawer = document.getElementById("nav-drawer");
+
+    menuBtn?.addEventListener("click", () => {
+        const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
+        menuBtn.setAttribute("aria-expanded", String(!isOpen));
+        drawer?.setAttribute("aria-hidden", String(isOpen));
+    });
+
+    document.addEventListener("click", (e) => {
+        const target = e.target as Node | null;
+        if (!menuBtn?.contains(target) && !drawer?.contains(target)) {
+            menuBtn?.setAttribute("aria-expanded", "false");
+            drawer?.setAttribute("aria-hidden", "true");
+        }
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            menuBtn?.setAttribute("aria-expanded", "false");
+            drawer?.setAttribute("aria-hidden", "true");
+        }
     });
 </script>

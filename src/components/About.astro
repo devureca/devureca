@@ -1,143 +1,289 @@
 ---
+interface Props {
+    name?: string;
+    avatar?: string;
+    status?: string;
+    description?: string;
+}
 
+const {
+    name = "Gianfranco Ureta Carrera",
+    avatar = "https://res.cloudinary.com/dpabb0ryo/image/upload/q_auto/f_auto/v1775145796/Gianfranco1_ysszlx.png",
+    status = "Developer",
+    description = "Desde Huancayo, Perú. Mi trabajo une la complejidad de los sistemas con la apertura del open source, convencido de que la tecnología de alto nivel no debería tener barreras económicas. Cuando no programo, me pierdo entre historietas y videojuegos.",
+} = Astro.props;
 ---
 
-<section id="about">
-    <div class="col">
-        <div class="section-label">Sobre mí</div>
+<section class="author-section" id="author-section">
+    <div class="author-lines">
+        <svg id="author-blueprint-svg"></svg>
+    </div>
 
-        <p class="about-text reveal">
-            Basado en <strong>Huancayo, Perú</strong>. Mi trabajo une la
-            complejidad de los sistemas con la apertura del open source,
-            convencido de que la tecnología de alto nivel no debería tener
-            barreras económicas. Cuando no programo, me pierdo entre <strong
-                >historietas</strong
-            > y <strong>videojuegos</strong>.
-        </p>
+    <div class="author-container" id="author-container">
+        <div class="author-header" id="author-header-box">
+            <div class="avatar-wrapper">
+                <img src={avatar} alt={name} class="avatar-img" />
+            </div>
 
-        <div class="stack-grid reveal">
-            <div class="stack-item">
-                <span class="stack-label">Diseño</span>
-                <span class="stack-tools">Figma · Framer</span>
+            <div class="author-info">
+                <h2 class="author-name">{name}</h2>
+                <p class="author-tagline">{status}</p>
+                <div class="current-activity">
+                    <span class="activity-dot" id="activity-dot"></span>
+                    <span id="activity-text">Cargando estado...</span>
+                </div>
             </div>
-            <div class="stack-item">
-                <span class="stack-label">Frontend</span>
-                <span class="stack-tools">React · Astro · TypeScript</span>
-            </div>
-            <div class="stack-item">
-                <span class="stack-label">Backend</span>
-                <span class="stack-tools">Node.js · PostgreSQL</span>
-            </div>
-            <div class="stack-item">
-                <span class="stack-label">Deploy</span>
-                <span class="stack-tools">Vercel · GitHub</span>
+        </div>
+
+        <div class="author-about">
+            <div class="about-content">
+                <slot />
+                {description && <p>{description}</p>}
             </div>
         </div>
     </div>
 </section>
 
 <style>
-    #about {
+    .author-section {
         position: relative;
-        z-index: 2;
-        background: var(--bg);
-        padding: 80px 0;
-    }
-
-    .section-label {
-        font-size: 11px;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        margin-bottom: 48px;
+        width: 100%;
         display: flex;
-        align-items: center;
-        gap: 10px;
+        justify-content: center;
+        background: transparent;
+        margin-top: -1px;
+        padding-bottom: 4rem;
     }
 
-    .section-label::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background: var(--border);
+    .author-lines {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 1;
     }
 
-    .about-text {
-        font-size: 15px;
-        color: var(--text-dim);
-        line-height: 1.9;
-        margin-bottom: 24px;
+    #author-blueprint-svg {
+        width: 100%;
+        height: 100%;
+        display: block;
     }
 
-    .about-text strong {
-        color: var(--text);
-        font-weight: 500;
-    }
-
-    .stack-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2px;
-        margin-top: 40px;
-    }
-
-    .stack-item {
-        background: var(--bg-2);
-        border: 1px solid var(--border);
-        padding: 16px 20px;
+    .author-container {
+        position: relative;
+        width: min(48rem, calc(100% - 2rem));
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        transition: border-color 0.2s;
+        z-index: 2;
     }
 
-    .stack-item:hover {
-        border-color: var(--text-muted);
+    .author-header {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+        padding: 3.5rem 1.5rem;
+        background: transparent;
     }
 
-    .stack-label {
-        font-size: 10px;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--accent);
-        transition: color 0.8s ease;
+    .avatar-wrapper {
+        width: 120px;
+        height: 120px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        flex-shrink: 0;
+        background: var(--bg-surface);
     }
 
-    .stack-tools {
-        font-size: 13px;
-        color: var(--text-dim);
-        letter-spacing: 0.04em;
+    .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
-    .reveal {
-        opacity: 0;
-        transform: translateY(20px);
-        transition:
-            opacity 0.7s ease,
-            transform 0.7s ease;
+    .author-info {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        font-family: var(--font-mono);
     }
 
-    .reveal.visible {
-        opacity: 1;
-        transform: translateY(0);
+    .author-name {
+        font-family: var(--font-sans);
+        font-size: 1.4rem;
+        font-weight: 400;
+        color: var(--text-primary);
+        letter-spacing: -0.02em;
+    }
+
+    .author-tagline {
+        color: var(--text-muted);
+        font-size: 1rem;
+        font-weight: 300;
+    }
+
+    .current-activity {
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    .activity-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        transition: all 0.5s ease;
+        position: relative;
+    }
+
+    .activity-dot::after {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: 50%;
+        background: inherit;
+        opacity: 0.4;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 0.4;
+        }
+        70% {
+            transform: scale(2.5);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0;
+        }
+    }
+
+    .about-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        padding: 2.5rem 1.5rem;
+    }
+
+    .about-content :global(p) {
+        font-family: var(--font-mono);
+        position: relative;
+        padding-left: 1.5rem;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        font-weight: 300;
+        color: var(--text-primary);
+        margin: 0;
     }
 </style>
 
 <script>
-    document.addEventListener("astro:page-load", () => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting)
-                        entry.target.classList.add("visible");
-                });
-            },
-            { threshold: 0.12 },
-        );
+    function updateActivityStatus() {
+        const textElement = document.getElementById("activity-text");
+        const dotElement = document.getElementById("activity-dot");
+        if (!textElement || !dotElement) return;
 
-        document.querySelectorAll("#about .reveal").forEach((el, i) => {
-            (el as HTMLElement).style.transitionDelay = `${i * 0.1}s`;
-            observer.observe(el);
+        const now = new Date();
+        const day = now.getDay();
+        const hour = now.getHours();
+
+        let statusText = "";
+        let dotColor = "#94a3b8";
+
+        const isWeekend = day === 0 || day === 6;
+        const isWeekday = !isWeekend;
+        const isPreWork = hour >= 7 && hour < 9;
+        const isWorkHour = hour >= 9 && hour < 18;
+        const isPostWork = hour >= 18 && hour < 23;
+
+        if (isWeekend) {
+            statusText = "Offline · Modo Descompresión";
+            dotColor = "#f87171";
+        } else if (isWeekday && isPreWork) {
+            statusText = "Sincronizando · Café y Logs";
+            dotColor = "#fbbf24";
+        } else if (isWeekday && isWorkHour) {
+            statusText = "En órbita · Producción Activa";
+            dotColor = "#4ade80";
+        } else if (isWeekday && isPostWork) {
+            statusText = "Idle · Side Quests y Gaming";
+            dotColor = "#60a5fa";
+        } else {
+            statusText = "Hibernación · Recargando celdas";
+            dotColor = "#1e293b";
+        }
+
+        textElement.innerText = statusText;
+        dotElement.style.background = dotColor;
+    }
+
+    function drawAuthorBlueprint() {
+        const section = document.getElementById("author-section");
+        const container = document.getElementById("author-container");
+        const header = document.getElementById("author-header-box");
+        const svg = document.getElementById(
+            "author-blueprint-svg",
+        ) as unknown as SVGSVGElement;
+
+        if (!section || !container || !header || !svg) return;
+
+        const W = section.offsetWidth;
+        const H = section.offsetHeight;
+        const nL = container.offsetLeft;
+        const nR = container.offsetLeft + container.offsetWidth;
+
+        const t1 = 0;
+        const t2 = header.offsetHeight;
+        const t3 = H;
+
+        const isDark = !document.documentElement.classList.contains("light");
+        const stroke = isDark
+            ? "rgba(255, 255, 255, 0.1)"
+            : "rgba(0, 0, 0, 0.08)";
+        const dotFill = isDark
+            ? "rgba(255, 255, 255, 0.3)"
+            : "rgba(0, 0, 0, 0.2)";
+        const sw = "0.8";
+
+        let markup = "";
+
+        [t1, t2, t3].forEach((y) => {
+            markup += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${stroke}" stroke-width="${sw}"/>`;
         });
+
+        [nL, nR].forEach((x) => {
+            markup += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="${stroke}" stroke-width="${sw}"/>`;
+        });
+
+        [t1, t2, t3].forEach((y) => {
+            [nL, nR].forEach((x) => {
+                markup += `<circle cx="${x}" cy="${y}" r="2" fill="${dotFill}"/>`;
+            });
+        });
+
+        svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+        svg.innerHTML = markup;
+    }
+
+    window.addEventListener("resize", () => {
+        drawAuthorBlueprint();
+        updateActivityStatus();
     });
+
+    document.documentElement.addEventListener(
+        "themechange",
+        drawAuthorBlueprint,
+    );
+
+    drawAuthorBlueprint();
+    updateActivityStatus();
+    setInterval(updateActivityStatus, 60000);
+    setTimeout(drawAuthorBlueprint, 200);
 </script>
